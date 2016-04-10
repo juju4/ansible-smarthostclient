@@ -1,0 +1,14 @@
+---
+- name: start postfix
+  service: name=postfix state=started
+- name: postmap smarthost_passwd
+  command: "postmap /etc/postfix/smarthost_passwd chdir=/etc/postfix"
+  when: smarthost|success
+- name: restart postfix
+  service: name=postfix state=restarted
+
+- name: makemap secrets
+  command: makemap /etc/mail/secrets
+- name: restart opensmtpd
+  command: rcctl restart smtpd
+

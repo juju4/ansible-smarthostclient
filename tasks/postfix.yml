@@ -1,0 +1,47 @@
+---
+
+- name: apt | Install postfix mail server
+  apt: pkg=postfix state=present
+  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
+
+- name: yum | Install postfix mail server
+  yum: name=postfix state=present
+  when: ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- stat: path=/etc/postfix/smarthost_passwd
+  register: st
+#- template: src=smarthost_passwd dest=/tmp/smarthost_passwd mode=0600
+#- stat: path=/tmp/smarthost_passwd
+#  register: st2
+- name: Upload smarthost authentication info
+## FIXME! input file not found at /tmp/smarthost_passwd or /tmp/smarthost_passwd
+#  copy: src=/tmp/smarthost_passwd dest=/etc/postfix/smarthost_passwd mode=0600
+  register: smarthost
+#  when: not st.stat.md5 is defined or not st2.stat.md5 == st.stat.md5
+## FIXME! fatal: [mydns] => Failed to template {% if not st.stat.md5 == 62509739d656d25c084e7537676a6b97 %} True {% else %} False {% endif %}: template error while templating string: unexpected char u'd' at 33
+  template: src=smarthost_passwd dest=/etc/postfix/smarthost_passwd mode=0600
+#  when: not st.stat.md5 == {{ smarthost_passwd_md5 }}
+  notify:
+    - postmap smarthost_passwd
+- name: Review smarthost relay config
+  lineinfile:
+    dest='/etc/postfix/main.cf' regexp='^relayhost = $' state=absent
+- name: Append smarthost relay config
+  lineinfile:
+    dest=/etc/postfix/main.cf 
+    line="{{ item.line }}"
+  with_items:
+    - { line: 'smtp_sasl_auth_enable = yes' }
+    - { line: 'smtp_sasl_password_maps = hash:/etc/postfix/smarthost_passwd' }
+    - { line: 'smtp_sasl_security_options = noanonymous' }
+    - { line: 'smtp_use_tls = yes' }
+#    - { line: 'relayhost = {{ smarthost }}' }
+    - { line: 'relayhost = [smtp.gmail.com]:587' }
+
+#- name: Replace smarthost relay config
+#  replace:
+#    dest='/etc/postfix/main.cf' regexp='^relayhost = $' replace='relayhost = {{ smarthost }}'
+  notify:
+    - restart postfix
+
+

@@ -1,0 +1,9 @@
+---
+
+smarthost_passfile:
+ - smarthost_passwd
+smarthost_passwd_md5:
+
+smarthost_host: '[smtp.gmail.com]:587'
+smarthost_userpass: login:pass
+
