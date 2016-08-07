@@ -28,7 +28,7 @@
     dest='/etc/postfix/main.cf' regexp='^relayhost = $' state=absent
 - name: Append smarthost relay config
   lineinfile:
-    dest=/etc/postfix/main.cf 
+    dest=/etc/postfix/main.cf
     line="{{ item.line }}"
   with_items:
     - { line: 'smtp_sasl_auth_enable = yes' }
