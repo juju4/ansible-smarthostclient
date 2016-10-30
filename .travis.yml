@@ -14,7 +14,9 @@ env:
   - distribution: ubuntu
     version: 16.04
     init: /lib/systemd/systemd
-    run_opts: ""
+## xenial only: failure 1 running systemctl show for 'postfix': Failed to connect to bus: No such file or directory
+## https://github.com/docker/docker/issues/7459
+    run_opts: "--cap-add=SYS_ADMIN"
   - distribution: ubuntu
     version: 14.04
     init: /sbin/init
