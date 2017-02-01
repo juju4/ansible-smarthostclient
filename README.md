@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/juju4/ansible-smarthostclient.svg?branch=master)](https://travis-ci.org/juju4/ansible-smarthostclient)
+[![Build Status - Master](https://travis-ci.org/juju4/ansible-smarthostclient.svg?branch=master)](https://travis-ci.org/juju4/ansible-smarthostclient)
+[![Build Status - Devel](https://travis-ci.org/juju4/ansible-smarthostclient.svg?branch=devel)](https://travis-ci.org/juju4/ansible-smarthostclient/branches)
 # Set up system with smarthost as ansible role
 
 A simple ansible role to setup smarthost on unix system.
@@ -10,6 +11,7 @@ Currently postfix only.
 It was tested on the following versions:
  * 1.9
  * 2.0
+ * 2.2
 
 ### Operating systems
 
@@ -23,7 +25,7 @@ For example
 ```
 - host: all
   roles:
-    - smarthostclient
+    - juju4.smarthostclient
 ```
 
 ## Variables
@@ -44,13 +46,13 @@ This role has a travis basic test (for github), more advanced with kitchen and a
 
 Once you ensured all necessary roles are present, You can test with:
 ```
-$ cd /path/to/roles/smarthostclient
+$ cd /path/to/roles/juju4.smarthostclient
 $ kitchen verify
 $ kitchen login
 ```
 or
 ```
-$ cd /path/to/roles/smarthostclient/test/vagrant
+$ cd /path/to/roles/juju4.smarthostclient/test/vagrant
 $ vagrant up
 $ vagrant ssh
 ```
