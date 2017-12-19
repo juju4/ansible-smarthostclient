@@ -8,6 +8,15 @@
   yum: name=postfix state=present
   when: ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
 
+## 'fatal: parameter inet_interfaces: no local interface found for ::1'
+- name: RedHat | Restrict to IPv4
+  lineinfile:
+    dest: /etc/postfix/main.cf
+    regexp: '^inet_protocols = .*'
+    line: 'inet_protocols = ipv4'
+    backup: yes
+  when: ansible_os_family == "RedHat"
+
 - stat: path=/etc/postfix/smarthost_passwd
   register: st
 #- template: src=smarthost_passwd dest=/tmp/smarthost_passwd mode=0600
