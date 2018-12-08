@@ -6,7 +6,7 @@
 
 - name: yum | Install postfix mail server
   yum: name=postfix state=present
-  when: ansible_os_family == "RedHat" or ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  when: ansible_os_family == "RedHat"
 
 ## 'fatal: parameter inet_interfaces: no local interface found for ::1'
 - name: RedHat | Restrict to IPv4
@@ -17,7 +17,8 @@
     backup: yes
   when: ansible_os_family == "RedHat"
 
-- stat: path=/etc/postfix/smarthost_passwd
+- name: Check if /etc/postfix/smarthost_passwd exists
+  stat: path=/etc/postfix/smarthost_passwd
   register: st
 #- template: src=smarthost_passwd dest=/tmp/smarthost_passwd mode=0600
 #- stat: path=/tmp/smarthost_passwd
@@ -27,7 +28,8 @@
 #  copy: src=/tmp/smarthost_passwd dest=/etc/postfix/smarthost_passwd mode=0600
   register: smarthost
 #  when: not st.stat.md5 is defined or not st2.stat.md5 == st.stat.md5
-## FIXME! fatal: [mydns] => Failed to template {% if not st.stat.md5 == 62509739d656d25c084e7537676a6b97 %} True {% else %} False {% endif %}: template error while templating string: unexpected char u'd' at 33
+## FIXME! fatal: [mydns] => Failed to template {% if not st.stat.md5 == 62509739d656d25c084e7537676a6b97 %}
+##  True {% else %} False {% endif %}: template error while templating string: unexpected char u'd' at 33
   template: src=smarthost_passwd dest=/etc/postfix/smarthost_passwd mode=0600
 #  when: not st.stat.md5 == {{ smarthost_passwd_md5 }}
   notify:
@@ -37,8 +39,8 @@
     dest='/etc/postfix/main.cf' regexp='^relayhost = $' state=absent
 - name: Append smarthost relay config
   lineinfile:
-    dest=/etc/postfix/main.cf
-    line="{{ item.line }}"
+    dest: /etc/postfix/main.cf
+    line: "{{ item.line }}"
   with_items:
     - { line: 'smtp_sasl_auth_enable = yes' }
     - { line: 'smtp_sasl_password_maps = hash:/etc/postfix/smarthost_passwd' }
@@ -52,5 +54,3 @@
 #    dest='/etc/postfix/main.cf' regexp='^relayhost = $' replace='relayhost = {{ smarthost }}'
   notify:
     - restart postfix
-
-

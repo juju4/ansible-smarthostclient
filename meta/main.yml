@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: smarthostclient
   author: juju4
   description: setup smarthost on unix system
   license: BSD
@@ -26,4 +27,3 @@ galaxy_info:
   - system
   - security
 dependencies: []
-
