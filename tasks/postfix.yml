@@ -1,12 +1,9 @@
 ---
 
-- name: apt | Install postfix mail server
-  apt: pkg=postfix state=present
-  when: (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
-
-- name: yum | Install postfix mail server
-  yum: name=postfix state=present
-  when: ansible_os_family == "RedHat"
+- name: Install postfix mail server
+  package: name=postfix state=present
+  register: pkg_result
+  until: pkg_result is success
 
 ## 'fatal: parameter inet_interfaces: no local interface found for ::1'
 - name: RedHat | Restrict to IPv4
