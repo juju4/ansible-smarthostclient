@@ -5,7 +5,7 @@
 
 - name: postmap smarthost_passwd
   command: "postmap /etc/postfix/smarthost_passwd chdir=/etc/postfix"
-  when: smarthost|success
+  when: smarthost is success
 
 - name: restart postfix
   service: name=postfix state=restarted
