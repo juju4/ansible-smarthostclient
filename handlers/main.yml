@@ -9,6 +9,12 @@
 
 - name: restart postfix
   service: name=postfix state=restarted
+  when: >
+    not (
+      ansible_os_family == "RedHat" and ansible_virtualization_type is defined and (
+        ansible_virtualization_type == "docker" or ansible_virtualization_type == "VirtualPC"
+      )
+    )
 
 - name: makemap secrets
   command: makemap /etc/mail/secrets
