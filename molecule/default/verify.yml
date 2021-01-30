@@ -1,0 +1,32 @@
+---
+
+- name: Verify
+  hosts: smarthost
+  tasks:
+
+    - name: Ensure process is running
+      command: pgrep -u root master
+      register: ps
+      changed_when: false
+      ignore_errors: true
+    - name: Validate ps output
+      assert:
+        that: ps.stdout
+
+    - name: Fetch content of /etc/postfix/smarthost_passwd
+      slurp:
+        src: /etc/postfix/smarthost_passwd
+      register: pass
+    - name: Validate /etc/postfix/smarthost_passwd
+      assert:
+        that: >
+                "'login:pass' in pass['content'] | b64decode"
+
+    - name: Fetch content of /etc/postfix/main.cf
+      slurp:
+        src: /etc/postfix/main.cf
+      register: cfg
+    - name: Validate /etc/postfix/main.cf
+      assert:
+        that: >
+                "'relayhost = [smtp.gmail.com]:587' in pass['content'] | b64decode"
