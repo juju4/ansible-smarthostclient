@@ -16,11 +16,11 @@
     - name: Fetch content of /etc/postfix/smarthost_passwd
       slurp:
         src: /etc/postfix/smarthost_passwd
-      register: pass
+      register: passfile
     - name: Validate /etc/postfix/smarthost_passwd
       assert:
         that: >
-                "'login:pass' in pass['content'] | b64decode"
+                "'login:pass' in passfile['content'] | b64decode"
 
     - name: Fetch content of /etc/postfix/main.cf
       slurp:
@@ -29,4 +29,4 @@
     - name: Validate /etc/postfix/main.cf
       assert:
         that: >
-                "'relayhost = [smtp.gmail.com]:587' in pass['content'] | b64decode"
+                "'relayhost = [smtp.gmail.com]:587' in cfg['content'] | b64decode"
