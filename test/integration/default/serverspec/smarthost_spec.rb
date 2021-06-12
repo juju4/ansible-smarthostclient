@@ -21,4 +21,3 @@ describe file('/etc/postfix/main.cf') do
   it { should be_file }
   its(:content) { should match /relayhost = \[smtp.gmail.com\]:587/ }
 end
-
