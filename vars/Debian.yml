@@ -1,0 +1,5 @@
+---
+
+smarthostclient_pkgs:
+  - postfix
+  - libsasl2-modules

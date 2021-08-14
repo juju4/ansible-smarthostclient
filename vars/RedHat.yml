@@ -1,0 +1,7 @@
+---
+
+smarthostclient_pkgs:
+  - postfix
+  - cyrus-sasl
+  - cyrus-sasl-lib
+  - cyrus-sasl-plain
