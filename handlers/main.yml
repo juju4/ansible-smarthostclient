@@ -1,14 +1,14 @@
 ---
 
 - name: start postfix
-  service: name=postfix state=started
+  ansible.builtin.service: name=postfix state=started
 
 - name: postmap smarthost_passwd
-  command: "postmap /etc/postfix/smarthost_passwd chdir=/etc/postfix"
+  ansible.builtin.command: "postmap /etc/postfix/smarthost_passwd chdir=/etc/postfix"
   when: smarthost is success
 
 - name: restart postfix
-  service: name=postfix state=restarted
+  ansible.builtin.service: name=postfix state=restarted
   when: >
     not (
       ansible_os_family == "RedHat" and ansible_virtualization_type is defined and (
@@ -17,7 +17,7 @@
     )
 
 - name: makemap secrets
-  command: makemap /etc/mail/secrets
+  ansible.builtin.command: makemap /etc/mail/secrets
 
 - name: restart opensmtpd
-  command: rcctl restart smtpd
+  ansible.builtin.command: rcctl restart smtpd
