@@ -5,12 +5,12 @@
   tasks:
 
     - name: Ensure process is running
-      command: pgrep -u root master
+      ansible.builtin.command: pgrep -u root master
       register: ps
       changed_when: false
       ignore_errors: true
     - name: Validate ps output
-      assert:
+      ansible.builtin.assert:
         that: ps.stdout
       when: >
         not (
@@ -20,19 +20,19 @@
         )
 
     - name: Fetch content of /etc/postfix/smarthost_passwd
-      slurp:
+      ansible.builtin.slurp:
         src: /etc/postfix/smarthost_passwd
       register: passfile
     - name: Validate /etc/postfix/smarthost_passwd
-      assert:
+      ansible.builtin.assert:
         that: >
                 "'login:pass' in passfile['content'] | b64decode"
 
     - name: Fetch content of /etc/postfix/main.cf
-      slurp:
+      ansible.builtin.slurp:
         src: /etc/postfix/main.cf
       register: cfg
     - name: Validate /etc/postfix/main.cf
-      assert:
+      ansible.builtin.assert:
         that: >
                 "'relayhost = [smtp.gmail.com]:587' in cfg['content'] | b64decode"
