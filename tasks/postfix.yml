@@ -33,7 +33,7 @@
   ansible.builtin.template: src=smarthost_passwd dest=/etc/postfix/smarthost_passwd mode=0600
   # when: not st.stat.md5 == {{ smarthost_passwd_md5 }}
   notify:
-    - postmap smarthost_passwd
+    - Postmap smarthost_passwd
 - name: Review smarthost relay config
   ansible.builtin.lineinfile:
     dest='/etc/postfix/main.cf' regexp='^relayhost = $' state=absent
@@ -51,7 +51,7 @@
     # - { re: '^relayhost = .*', line: 'relayhost = {{ smarthost }}' }
     - { re: '^relayhost = .*', line: 'relayhost = [smtp.gmail.com]:587' }
   notify:
-    - restart postfix
+    - Restart postfix
 
 # - name: Replace smarthost relay config
 #   ansible.builtin.replace:
