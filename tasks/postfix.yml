@@ -18,7 +18,8 @@
   when: ansible_os_family == "RedHat" or smarthostclient_inet_ipv4_only
 
 - name: Check if /etc/postfix/smarthost_passwd exists
-  ansible.builtin.stat: path=/etc/postfix/smarthost_passwd
+  ansible.builtin.stat:
+    path: "/etc/postfix/smarthost_passwd"
   register: st
 # - template: src=smarthost_passwd dest=/tmp/smarthost_passwd mode=0600
 # - stat: path=/tmp/smarthost_passwd
@@ -30,13 +31,18 @@
   # when: not st.stat.md5 is defined or not st2.stat.md5 == st.stat.md5
   ## FIXME! fatal: [mydns] => Failed to template {% if not st.stat.md5 == 62509739d656d25c084e7537676a6b97 %}
   ##  True {% else %} False {% endif %}: template error while templating string: unexpected char u'd' at 33
-  ansible.builtin.template: src=smarthost_passwd dest=/etc/postfix/smarthost_passwd mode=0600
+  ansible.builtin.template:
+    src: "smarthost_passwd"
+    dest: "/etc/postfix/smarthost_passwd"
+    mode: "0600"
   # when: not st.stat.md5 == {{ smarthost_passwd_md5 }}
   notify:
     - Postmap smarthost_passwd
 - name: Review smarthost relay config
   ansible.builtin.lineinfile:
-    dest='/etc/postfix/main.cf' regexp='^relayhost = $' state=absent
+    dest: '/etc/postfix/main.cf'
+    regexp: '^relayhost = $'
+    state: "absent"
 - name: Append smarthost relay config
   ansible.builtin.lineinfile:
     dest: /etc/postfix/main.cf

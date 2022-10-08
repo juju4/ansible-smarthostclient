@@ -1,14 +1,20 @@
 ---
 
 - name: Start postfix
-  ansible.builtin.service: name=postfix state=started
+  ansible.builtin.service:
+    name: postfix
+    state: "started"
 
 - name: Postmap smarthost_passwd
-  ansible.builtin.command: "postmap /etc/postfix/smarthost_passwd chdir=/etc/postfix"
+  ansible.builtin.command: "postmap /etc/postfix/smarthost_passwd"
+  args:
+    chdir: "/etc/postfix"
   when: smarthost is success
 
 - name: Restart postfix
-  ansible.builtin.service: name=postfix state=restarted
+  ansible.builtin.service:
+    name: "postfix"
+    state: "restarted"
   when: >
     not (
       ansible_os_family == "RedHat" and ansible_virtualization_type is defined and (
