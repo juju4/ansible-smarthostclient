@@ -2,6 +2,12 @@
 
 - name: Verify
   hosts: smarthost
+  pre_tasks:
+    - name: RedHat | Ensure pgrep is present
+      ansible.builtin.package:
+        name: procps-ng
+        state: present
+      when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
   tasks:
 
     - name: Ensure process is running
