@@ -6,7 +6,8 @@
     state: "started"
 
 - name: Postmap smarthost_passwd
-  ansible.builtin.command: "postmap /etc/postfix/smarthost_passwd"
+  ansible.builtin.command:  # noqa no-changed-when
+    cmd: "postmap /etc/postfix/smarthost_passwd"
   args:
     chdir: "/etc/postfix"
   when: smarthost is success
@@ -25,7 +26,9 @@
     )
 
 - name: Makemap secrets
-  ansible.builtin.command: makemap /etc/mail/secrets
+  ansible.builtin.command:  # noqa no-changed-when
+    cmd: makemap /etc/mail/secrets
 
 - name: Restart opensmtpd
-  ansible.builtin.command: rcctl restart smtpd
+  ansible.builtin.command:  # noqa no-changed-when
+    cmd: rcctl restart smtpd
