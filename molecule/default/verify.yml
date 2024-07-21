@@ -8,6 +8,11 @@
         name: procps-ng
         state: present
       when: ansible_os_family == "RedHat" and ansible_distribution_major_version | int >= 8
+    - name: Debian | Ensure pgrep is present
+      ansible.builtin.package:
+        name: procps
+        state: present
+      when: ansible_os_family == "Debian"
   tasks:
 
     - name: Ensure process is running
