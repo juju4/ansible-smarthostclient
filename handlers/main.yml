@@ -32,3 +32,25 @@
 - name: Restart opensmtpd
   ansible.builtin.command:  # noqa no-changed-when
     cmd: rcctl restart smtpd
+
+- name: Run update-exim4.conf
+  ansible.builtin.command:  # noqa no-changed-when
+    cmd: update-exim4.conf
+
+# FIXME! nok as interactive
+- name: Run exim-gencert
+  ansible.builtin.command:  # noqa no-changed-when
+    cmd: /usr/share/doc/exim4-base/examples/exim-gencert
+
+- name: Restart exim
+  ansible.builtin.service:
+    name: "exim4"
+    state: "restarted"
+  when: >
+    not (
+      ansible_os_family == "RedHat" and ansible_virtualization_type is defined and (
+        ansible_virtualization_type == "docker"
+        or ansible_virtualization_type == "containerd"
+        or ansible_virtualization_type == "container"
+      )
+    )

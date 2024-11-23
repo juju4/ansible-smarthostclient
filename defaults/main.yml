@@ -1,10 +1,16 @@
 ---
 
+smarthost_mta: postfix
+# smarthost_mta: exim
+
 smarthost_passfile:
  - smarthost_passwd
 smarthost_passwd_md5:
 
+# postfix
 smarthost_host: '[smtp.gmail.com]:587'
+# exim, https://wiki.debian.org/Exim4Gmail
+# smarthost_host: 'smtp.gmail.com::587'
 smarthost_userpass: login:pass
 
 smarthostclient_inet_ipv4_only: false

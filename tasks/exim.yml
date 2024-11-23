@@ -1,0 +1,49 @@
+---
+
+- name: Install exim mail server
+  ansible.builtin.package:
+    name:
+      - exim4-base
+      - exim4-config
+      - exim4-daemon-light
+      - openssl
+    state: present
+  register: pkg_result
+  until: pkg_result is success
+
+- name: Upload smarthost authentication info
+  ansible.builtin.copy:
+    content: "*:{{ smarthost_userpass }}"
+    dest: "/etc/exim4/passwd.client"
+    mode: "0640"
+    owner: root
+    group: Debian-exim
+  notify:
+    - Restart exim
+- name: Ensure TLS is enabled
+  ansible.builtin.lineinfile:
+    regexp: "^MAIN_TLS_ENABLE = .*"
+    line: "MAIN_TLS_ENABLE = 1"
+    dest: "/etc/exim4/exim4.conf.localmacros"
+    mode: "0600"
+    owner: root
+    create: true
+  notify:
+    - Run update-exim4.conf
+    # - Run exim-gencert
+    - Restart exim
+- name: Review smarthost relay config
+  ansible.builtin.lineinfile:
+    dest: /etc/exim4/update-exim4.conf.conf
+    regexp: "{{ item.re }}"
+    line: "{{ item.l }}"
+  loop:
+    - { re: '^dc_eximconfig_configtype=.*',
+        l: "dc_eximconfig_configtype='smarthost'"
+    }
+    - { re: '^dc_smarthost=.*',
+        l: "dc_smarthost='{{ smarthost_host }}'"
+    }
+  notify:
+    - Run update-exim4.conf
+    - Restart exim

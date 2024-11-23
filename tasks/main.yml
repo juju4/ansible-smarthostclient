@@ -3,5 +3,17 @@
 - name: Include os family variables
   ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
 
+- name: Debug | var smarthost_host
+  ansible.builtin.debug:
+    var: smarthost_host
+    verbosity: 1
+
 - name: Import postfix
   ansible.builtin.import_tasks: postfix.yml
+  when:
+    - smarthost_mta == 'postfix'
+
+- name: Import exim
+  ansible.builtin.import_tasks: exim.yml
+  when:
+    - smarthost_mta == 'exim'
