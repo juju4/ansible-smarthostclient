@@ -38,8 +38,8 @@
       register: passfile
     - name: Validate /etc/postfix/smarthost_passwd
       ansible.builtin.assert:
-        that: >
-                "'login:pass' in passfile['content'] | b64decode"
+        that:
+          - "'login:pass' in passfile['content'] | b64decode"
 
     - name: Fetch content of /etc/postfix/main.cf
       ansible.builtin.slurp:
@@ -47,5 +47,5 @@
       register: cfg
     - name: Validate /etc/postfix/main.cf
       ansible.builtin.assert:
-        that: >
-                "'relayhost = [smtp.gmail.com]:587' in cfg['content'] | b64decode"
+        that:
+          - "'relayhost = [smtp.gmail.com]:587' in cfg['content'] | b64decode"
