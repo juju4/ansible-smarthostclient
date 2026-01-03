@@ -1,7 +1,7 @@
 ---
 
 - name: Include os family variables
-  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
+  ansible.builtin.include_vars: "{{ ansible_facts['os_family'] }}.yml"
 
 - name: Debug | var smarthost_host
   ansible.builtin.debug:
