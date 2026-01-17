@@ -1,5 +1,4 @@
 ---
-
 - name: Include os family variables
   ansible.builtin.include_vars: "{{ ansible_facts['os_family'] }}.yml"
 

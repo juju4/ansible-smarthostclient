@@ -1,5 +1,4 @@
 ---
-
 - name: Verify
   hosts: smarthost
   pre_tasks:
@@ -14,7 +13,6 @@
         state: present
       when: ansible_facts['os_family'] == "Debian"
   tasks:
-
     - name: Ensure process is running
       ansible.builtin.command: pgrep -u root master
       register: ps

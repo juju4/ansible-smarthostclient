@@ -1,5 +1,4 @@
 ---
-
 - name: Install exim mail server
   ansible.builtin.package:
     name:
@@ -38,12 +37,8 @@
     regexp: "{{ item.re }}"
     line: "{{ item.l }}"
   loop:
-    - { re: '^dc_eximconfig_configtype=.*',
-        l: "dc_eximconfig_configtype='smarthost'"
-    }
-    - { re: '^dc_smarthost=.*',
-        l: "dc_smarthost='{{ smarthost_host }}'"
-    }
+    - { re: "^dc_eximconfig_configtype=.*", l: "dc_eximconfig_configtype='smarthost'" }
+    - { re: "^dc_smarthost=.*", l: "dc_smarthost='{{ smarthost_host }}'" }
   notify:
     - Run update-exim4.conf
     - Restart exim
