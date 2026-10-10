@@ -1,7 +1,7 @@
+# Set up system with smarthost as ansible role
+
 [![Actions Status - Main](https://github.com/juju4/ansible-smarthostclient/workflows/AnsibleCI/badge.svg)](https://github.com/juju4/ansible-smarthostclient/actions?query=branch%3Amain)
 [![Actions Status - Devel](https://github.com/juju4/ansible-smarthostclient/workflows/AnsibleCI/badge.svg?branch=devel)](https://github.com/juju4/ansible-smarthostclient/actions?query=branch%3Adevel)
-
-# Set up system with smarthost as ansible role
 
 A simple ansible role to setup smarthost on unix system.
 Currently postfix only.
